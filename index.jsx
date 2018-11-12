@@ -15,8 +15,6 @@ export default (
     defaultParams = {},
     // 必填 请求函数
     queryData,
-    // 参数过滤
-    filterParams = params => params,
     // 默认页码
     defaultPageInfo = { current_page: 1, page_size: 30 },
     // 受控页码
@@ -27,24 +25,19 @@ export default (
     static displayName = `TablePage(${getDisplayName(WrappedComponent)})`
     constructor() {
       super()
-      const _defaultPageInfo = JSON.parse(JSON.stringify(defaultPageInfo))
       this.state = {
         ...this.state,
-        ..._defaultPageInfo,
+        ...defaultPageInfo,
         dataSource: [],
         loading: false,
-        defaultParams: {},
+        defaultParams,
         total: 0
       }
     }
-    componentWillMount() {
-      super.componentWillMount && super.componentWillMount()
-      // 第一次调用
-      this.tablePageQueryData(defaultParams, this.state)
-    }
-
     componentDidMount() {
       super.componentDidMount && super.componentDidMount()
+      // 第一次调用
+      this.tablePageQueryData(defaultParams, this.state)
       const { setFieldsValue } = this.props.form
       // 初始化表单数据
       setFieldsValue(defaultParams)
@@ -111,8 +104,7 @@ export default (
 
     tablePageQueryData = (params, pageInfo, state) => {
       this.setState({ loading: true })
-      const _params = filterParams ? filterParams(params, state) : params
-      queryData(_params, pageInfo, state, res => {
+      queryData(params, pageInfo, state, res => {
         this.setState({ loading: false })
         if (res) {
           const { dataSource, total } = res
@@ -158,10 +150,8 @@ export default (
 
     // 搜索点击 重置条码条件
     handleSearch = e => {
-      // e.preventdefault && e.preventdefault()
       const { getFieldsValue } = this.props.form
-      const params = getFieldsValue()
-      const state = this.state
+      const [params, state] = [getFieldsValue(), this.state]
       this.setState({ ...defaultPageInfo })
       this.tablePageQueryData(params, defaultPageInfo, state)
     }
