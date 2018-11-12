@@ -11,11 +11,10 @@
    3. state {object} 组件的state
    4. cb {function} 请求结果的回调函数，用true和false来传递成功和失败
 
-3. filterParams {function} 表单参数过滤函数
 
-4. pagination {boolean} 是否页码前端受控
+3. pagination {boolean} 是否页码前端受控
 
-5. defaultPageInfo {object} 页面的默认页码
+4. defaultPageInfo {object} 页面的默认页码
 
    1. current_page  {number} 当前页码
 
