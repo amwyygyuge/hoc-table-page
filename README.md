@@ -76,11 +76,11 @@ export class SupplierManage extends PureComponent {
 3. renderButtons {function} 返回按钮组，如果不想自己绑定函数，可以直接调用此函数
 4. loading {boolean} 加载状态
 5. form {object} form对象
+6. Item Form 表单的Item组件
 
 ```jsx
 import React, { Component } from 'react'
-import { Form, Row, Col, Input } from 'igroot'
-const FormItem = Form.Item
+import { Row, Col, Input } from 'igroot'
 const formItemLayout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 18 },
@@ -89,9 +89,10 @@ const formItemLayout = {
 class Search extends Component {
   render() {
     const { getFieldDecorator } = this.props.form
+    const { Item } = this.props
     return <Row>
       <Col span={6}>
-        <FormItem
+        <Item
 
           {...formItemLayout}
           label="厂商"
@@ -101,7 +102,7 @@ class Search extends Component {
               <Input />
             )
           }
-        </FormItem>
+        </Item>
       </Col>
       <Col span={18}>
         {this.props.renderButtons()}
