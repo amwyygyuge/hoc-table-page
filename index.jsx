@@ -63,7 +63,8 @@ export default (
         handleReset: this.handleReset,
         renderButtons: this.renderButtons,
         loading,
-        form: this.props.form
+        form: this.props.form,
+        Item
       }
     }
     _assembleListComponentProps = () => {
