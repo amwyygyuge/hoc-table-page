@@ -69,17 +69,18 @@ export default (
     }
     _assembleListComponentProps = () => {
       const { loading, dataSource, total } = this.state
+      const tableProps = this._tableProps()
       return {
         loading,
         dataSource,
         total,
         handleReload: this.handleReload,
-        tableProps: this._tableProps(),
-        setDataSoruce: this._setDataSoruce
+        tableProps,
+        setDataSource: this._setDataSource
       }
     }
 
-    _setDataSoruce = dataSource => {
+    _setDataSource = dataSource => {
       this.setState({ dataSource })
     }
 
@@ -92,8 +93,8 @@ export default (
         showTotal: total => `总条数 ${total} 条`,
         showSizeChanger: true,
         pageSizeOptions: ['10', '20', '30', '50', '100', '200'],
-        onChange: this.hadnlePageChange,
-        onShowSizeChange: this.hadnlePageChange,
+        onChange: this.handlePageChange,
+        onShowSizeChange: this.handlePageChange,
       }
       return {
         loading,
@@ -105,7 +106,7 @@ export default (
 
     tablePageQueryData = (params, pageInfo, state) => {
       this.setState({ loading: true })
-      queryData(params, pageInfo, state, res => {
+      const promise = queryData(params, pageInfo, state, res => {
         this.setState({ loading: false })
         if (res) {
           const { dataSource, total } = res
@@ -117,7 +118,7 @@ export default (
           message.error('数据请求失败。')
         }
       })
-
+      promise && promise.catch(err => this.setState({ loading: false }))
     }
 
     // 处理按钮渲染
@@ -140,7 +141,7 @@ export default (
       </Item>
     }
 
-    hadnlePageChange = (current_page, page_size) => {
+    handlePageChange = (current_page, page_size) => {
       this.setState({ current_page, page_size })
       const { getFieldsValue } = this.props.form
       const params = getFieldsValue()
