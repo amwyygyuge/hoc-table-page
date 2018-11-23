@@ -1,0 +1,33 @@
+{
+  "name": "igroot-table-page",
+  "version": "1.0.0",
+  "description": "a  engine of analysis json to react",
+  "author": "junxiong.cai",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "igroot",
+    "hoc"
+  ],
+  "dependencies": {
+    "igroot": "^1.6.6",
+    "react": "^16.6.3"
+  },
+  "engines": {
+    "node": ">= 6.9.3",
+    "npm": ">= 3"
+  },
+  "scripts": {
+    "dist": "babel --watch lib -d dist "
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "devDependencies": {
+    "babel-plugin-import": "^1.11.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1"
+  }
+}
