@@ -30,6 +30,7 @@ export default ({
 				total: 0
 			}
 		}
+
 		componentDidMount() {
 			super.componentDidMount && super.componentDidMount()
 			// 第一次调用
@@ -87,7 +88,7 @@ export default ({
 				total,
 				showTotal: total => `总条数 ${total} 条`,
 				showSizeChanger: true,
-				pageSizeOptions: [ '10', '20', '30', '50', '100', '200' ],
+				pageSizeOptions: ['10', '20', '30', '50', '100', '200'],
 				onChange: this.handlePageChange,
 				onShowSizeChange: this.handlePageChange
 			}
@@ -114,7 +115,7 @@ export default ({
 					message.error('数据请求失败。')
 				}
 			})
-			promise && promise.catch(err => this.setState({ loading: false }))
+			promise && promise.catch(err => { })
 		}
 
 		// 处理按钮渲染
@@ -147,12 +148,11 @@ export default ({
 			this.tablePageQueryData(params, { current_page, page_size }, state, cb)
 		}
 
-		// 搜索点击 重置条码条件
+		// 搜索点击 重置页码条件
 		handleSearch = e => {
 			const { getFieldsValue } = this.props.form
-			const [ params, state ] = [ getFieldsValue(), this.state ]
-			this.setState({ ...defaultPageInfo })
-			this.tablePageQueryData(params, defaultPageInfo, state)
+			const params = getFieldsValue()
+			this.excuteSearch(params)
 		}
 
 		// 重置点击 重置所有
@@ -160,12 +160,16 @@ export default ({
 			const { resetFields, setFieldsValue } = this.props.form
 			resetFields()
 			setFieldsValue(defaultParams)
-			this.setState({
-				current_page: 1,
-				page_size: 30
-			})
+			this.excuteSearch(defaultParams)
+		}
+
+		// 解析页码，并执行搜索
+		excuteSearch = params => {
+			const { current_page } = defaultPageInfo
+			const { page_size } = this.state
+			this.setState({ current_page })
 			const state = this.state
-			this.tablePageQueryData(defaultParams, defaultPageInfo, state)
+			this.tablePageQueryData(params, { current_page, page_size }, state)
 		}
 
 		// 数据重载 保存所有条件

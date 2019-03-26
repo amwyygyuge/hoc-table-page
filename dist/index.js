@@ -165,9 +165,7 @@ exports.default = function (_ref) {
 							_message3.default.error('数据请求失败。');
 						}
 					});
-					promise && promise.catch(function (err) {
-						return _this.setState({ loading: false });
-					});
+					promise && promise.catch(function (err) {});
 				};
 
 				_this.renderButtons = function () {
@@ -209,12 +207,9 @@ exports.default = function (_ref) {
 
 				_this.handleSearch = function (e) {
 					var getFieldsValue = _this.props.form.getFieldsValue;
-					var _ref2 = [getFieldsValue(), _this.state],
-					    params = _ref2[0],
-					    state = _ref2[1];
 
-					_this.setState(_extends({}, defaultPageInfo));
-					_this.tablePageQueryData(params, defaultPageInfo, state);
+					var params = getFieldsValue();
+					_this.excuteSearch(params);
 				};
 
 				_this.handleReset = function () {
@@ -224,12 +219,16 @@ exports.default = function (_ref) {
 
 					resetFields();
 					setFieldsValue(defaultParams);
-					_this.setState({
-						current_page: 1,
-						page_size: 30
-					});
+					_this.excuteSearch(defaultParams);
+				};
+
+				_this.excuteSearch = function (params) {
+					var current_page = defaultPageInfo.current_page;
+					var page_size = _this.state.page_size;
+
+					_this.setState({ current_page: current_page });
 					var state = _this.state;
-					_this.tablePageQueryData(defaultParams, defaultPageInfo, state);
+					_this.tablePageQueryData(params, { current_page: current_page, page_size: page_size }, state);
 				};
 
 				_this.handleReload = function () {
@@ -267,10 +266,13 @@ exports.default = function (_ref) {
 				// 处理按钮渲染
 
 
-				// 搜索点击 重置条码条件
+				// 搜索点击 重置页码条件
 
 
 				// 重置点击 重置所有
+
+
+				// 解析页码，并执行搜索
 
 
 				// 数据重载 保存所有条件
