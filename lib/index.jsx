@@ -115,7 +115,7 @@ export default ({
 					message.error('数据请求失败。')
 				}
 			})
-			promise && promise.catch(err => { })
+			promise && promise.catch(err => this.setState({ loading: false }))
 		}
 
 		// 处理按钮渲染

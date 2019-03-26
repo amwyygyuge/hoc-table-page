@@ -165,7 +165,9 @@ exports.default = function (_ref) {
 							_message3.default.error('数据请求失败。');
 						}
 					});
-					promise && promise.catch(function (err) {});
+					promise && promise.catch(function (err) {
+						return _this.setState({ loading: false });
+					});
 				};
 
 				_this.renderButtons = function () {
