@@ -3,7 +3,6 @@
 ## 场景
 适用于绝大部分搜索列表页面，例如
 
-![image-20181120135818421](/Users/caijunxiong/Library/Application Support/typora-user-images/image-20181120135818421.png)
 
 ## 优点
 1. 规范组件化拆分思路
