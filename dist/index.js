@@ -29,16 +29,8 @@ define(["require", "exports", "react", "igroot"], function (require, exports, Re
     function getDisplayName(WrappedComponent) {
         return WrappedComponent.displayName || 'Component';
     }
-    var HocTablePage = function (TablePageParams) {
-        if (TablePageParams === void 0) { TablePageParams = {
-            defaultParams: {},
-            pagination: true,
-            defaultPageInfo: {
-                current_page: 1,
-                page_size: 30
-            },
-            queryData: function (params, pageInfo, state, callback) { return Promise.resolve(); }
-        }; }
+    var HocTablePage = function (_a) {
+        var _b = _a.defaultParams, defaultParams = _b === void 0 ? {} : _b, queryData = _a.queryData, _c = _a.defaultPageInfo, defaultPageInfo = _c === void 0 ? { current_page: 1, page_size: 30 } : _c, _d = _a.pagination, pagination = _d === void 0 ? true : _d;
         return function (WrappedComponent) {
             var TablePage = (function (_super) {
                 __extends(TablePage, _super);
@@ -94,7 +86,7 @@ define(["require", "exports", "react", "igroot"], function (require, exports, Re
                         };
                         return {
                             loading: loading,
-                            pagination: TablePageParams.pagination ? pageConfig : null,
+                            pagination: pagination ? pageConfig : null,
                             rowKey: 'id',
                             dataSource: dataSource
                         };
@@ -124,11 +116,11 @@ define(["require", "exports", "react", "igroot"], function (require, exports, Re
                     _this.handleReset = function () {
                         var _a = _this.props.form, resetFields = _a.resetFields, setFieldsValue = _a.setFieldsValue;
                         resetFields();
-                        setFieldsValue(TablePageParams.defaultParams || {});
-                        _this.executeSearch(TablePageParams.defaultParams);
+                        setFieldsValue(defaultParams || {});
+                        _this.executeSearch(defaultParams);
                     };
                     _this.executeSearch = function (params) {
-                        var current_page = TablePageParams.defaultPageInfo.current_page;
+                        var current_page = defaultPageInfo.current_page;
                         var page_size = _this.state.page_size;
                         _this.setState({ current_page: current_page });
                         var state = _this.state;
@@ -143,7 +135,7 @@ define(["require", "exports", "react", "igroot"], function (require, exports, Re
                     };
                     _this.tablePageQueryData = function (params, pageInfo, state, cb) {
                         _this.setState({ loading: true });
-                        var promise = TablePageParams.queryData(params, pageInfo, state, function (callback) {
+                        var promise = queryData(params, pageInfo, state, function (callback) {
                             _this.setState({ loading: false });
                             if (callback) {
                                 var _a = callback, dataSource = _a.dataSource, total = _a.total;
@@ -159,15 +151,14 @@ define(["require", "exports", "react", "igroot"], function (require, exports, Re
                         });
                         promise && promise.catch(function (err) { return _this.setState({ loading: false }); });
                     };
-                    var defaultPageInfo = TablePageParams.defaultPageInfo, defaultParams = TablePageParams.defaultParams;
                     _this.state = __assign({}, _this.state, defaultPageInfo, { dataSource: [], loading: false, defaultParams: defaultParams, total: 0 });
                     return _this;
                 }
                 TablePage.prototype.componentDidMount = function () {
                     _super.prototype.componentDidMount && _super.prototype.componentDidMount.call(this);
-                    this.tablePageQueryData(TablePageParams.defaultParams, TablePageParams.defaultPageInfo, this.state);
+                    this.tablePageQueryData(defaultParams, defaultPageInfo, this.state);
                     var setFieldsValue = this.props.form.setFieldsValue;
-                    setFieldsValue(TablePageParams.defaultParams || {});
+                    setFieldsValue(defaultParams || {});
                 };
                 TablePage.prototype.render = function () {
                     var elementTree = _super.prototype.render.call(this);

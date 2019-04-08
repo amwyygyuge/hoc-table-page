@@ -28,9 +28,7 @@ export default TablePage({
 	// 默认搜索参数 默认 {}
 	defaultParams: {},
 	// 是否前端受控分页 默认 true
-	pagination: true,
 	// 默认页码  默认 { current_page: 1, page_size: 30 }
-	defaultPageInfo: { current_page: 1, page_size: 30 },
 	// 列表请求函数
 	queryData: (params, pageInfo, state, cb) => {
 		return getUserList().then(res => {

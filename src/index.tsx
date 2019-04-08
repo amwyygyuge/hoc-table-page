@@ -23,8 +23,8 @@ interface queryData {
 interface TablePageParams {
 	defaultParams?: {}
 	queryData: queryData
-	defaultPageInfo: PageInfo
-	pagination: boolean
+	defaultPageInfo?: PageInfo
+	pagination?: boolean
 }
 interface HocComponent {
 	(WrappedComponent: React.ComponentClass<FormProps>): any
@@ -35,22 +35,16 @@ interface HocTablePage {
 interface FormProps extends FormComponentProps {
 	[propName: string]: any
 }
-const HocTablePage: HocTablePage = (
-	TablePageParams: TablePageParams = {
-		defaultParams: {},
-		pagination: true,
-		defaultPageInfo: {
-			current_page: 1,
-			page_size: 30
-		},
-		queryData: (params, pageInfo, state, callback) => Promise.resolve()
-	}
-) => (WrappedComponent: React.ComponentClass<FormProps>) => {
+const HocTablePage: HocTablePage = ({
+	defaultParams = {},
+	queryData,
+	defaultPageInfo = { current_page: 1, page_size: 30 },
+	pagination = true
+}: TablePageParams) => (WrappedComponent: React.ComponentClass<FormProps>) => {
 	class TablePage extends WrappedComponent {
 		static displayName = `TablePage(${getDisplayName(WrappedComponent)})`
 		public constructor(props: any) {
 			super(props)
-			const { defaultPageInfo, defaultParams } = TablePageParams
 			this.state = {
 				...this.state,
 				...defaultPageInfo,
@@ -63,10 +57,10 @@ const HocTablePage: HocTablePage = (
 		public componentDidMount() {
 			super.componentDidMount && super.componentDidMount()
 			// 第一次调用
-			this.tablePageQueryData(TablePageParams.defaultParams, TablePageParams.defaultPageInfo, this.state)
+			this.tablePageQueryData(defaultParams, defaultPageInfo, this.state)
 			const { setFieldsValue } = this.props.form
 			// 初始化表单数据
-			setFieldsValue(TablePageParams.defaultParams || {})
+			setFieldsValue(defaultParams || {})
 		}
 
 		private _wrapSearchComponent = (SearchComponent: JSX.Element) => {
@@ -120,7 +114,7 @@ const HocTablePage: HocTablePage = (
 			}
 			return {
 				loading,
-				pagination: TablePageParams.pagination ? pageConfig : null,
+				pagination: pagination ? pageConfig : null,
 				rowKey: 'id',
 				dataSource
 			}
@@ -172,13 +166,13 @@ const HocTablePage: HocTablePage = (
 		public handleReset = () => {
 			const { resetFields, setFieldsValue } = this.props.form
 			resetFields()
-			setFieldsValue(TablePageParams.defaultParams || {})
-			this.executeSearch(TablePageParams.defaultParams)
+			setFieldsValue(defaultParams || {})
+			this.executeSearch(defaultParams)
 		}
 
 		// 解析页码，并执行搜索
 		public executeSearch = (params: {} | undefined) => {
-			const { current_page } = TablePageParams.defaultPageInfo
+			const { current_page } = defaultPageInfo
 			const { page_size } = this.state
 			this.setState({ current_page })
 			const state = this.state
@@ -196,7 +190,7 @@ const HocTablePage: HocTablePage = (
 
 		public tablePageQueryData = (params: {} | undefined, pageInfo: PageInfo, state: {}, cb?: () => void) => {
 			this.setState({ loading: true })
-			const promise = TablePageParams.queryData(params, pageInfo, state, callback => {
+			const promise = queryData(params, pageInfo, state, callback => {
 				this.setState({ loading: false })
 				if (callback) {
 					const { dataSource, total } = callback as callBackRes
