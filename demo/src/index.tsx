@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Card } from 'igroot'
 import { Search } from './Search'
 import { List } from './List'
-import TablePage from '../../dist'
+import TablePage from '../../src'
 import { FormComponentProps } from 'antd/lib/form'
 
 import './index.less'
@@ -13,18 +13,7 @@ const getUserList = () =>
 interface FormProps extends FormComponentProps {
 	[propName: string]: any
 }
-class TableHocPage extends React.PureComponent<FormProps> {
-	render() {
-		return (
-			<Card bodyStyle={{ padding: 10 }}>
-				<Search />
-				<List />
-			</Card>
-		)
-	}
-}
-
-export default TablePage({
+@TablePage({
 	// 默认搜索参数 默认 {}
 	defaultParams: {},
 	// 是否前端受控分页 默认 true
@@ -43,4 +32,16 @@ export default TablePage({
 			}
 		})
 	}
-})(TableHocPage)
+})
+class TableHocPage extends React.PureComponent<FormProps> {
+	render() {
+		return (
+			<Card bodyStyle={{ padding: 10 }}>
+				<Search />
+				<List />
+			</Card>
+		)
+	}
+}
+
+export default TableHocPage
